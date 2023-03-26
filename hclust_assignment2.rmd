@@ -1,0 +1,93 @@
+---
+title: "hclust_a2"
+author: "Mohal Khandelwal"
+date: "2023-02-28"
+output: html_document
+---
+
+library(stats)  
+install.packages("NbClust")
+library(NbClust)
+library(cluster)
+library(mclust)
+install.packages("amap")
+library(amap)  
+install.packages("factoextra")
+library(factoextra) 
+library(purrr)
+library(stylo) 
+install.packages("philentropy")
+library(philentropy) 
+library(SnowballC)
+library(caTools)
+library(dplyr)
+library(textstem)
+library(stringr)
+library(wordcloud)
+library(tm) 
+
+#setting directory
+setwd("C:/Users/HP/Downloads/RStudioFolder_1")
+
+#loading dataset into dataframe
+Record_DF_all<-read.csv("Sampleof_predictivemaintenance.csv")
+Record_DF_all
+
+#dataframe information
+summary(Record_DF_all)
+str(Record_DF_all)
+
+#changing datatype of columns
+Record_DF_all$Target <- as.factor(Record_DF_all$Target)
+Record_DF_all$Failure_Type <- as.factor(Record_DF_all$Failure_Type)
+str(Record_DF_all)
+
+#dropping unwanted columns and saving into a new dataframe
+(Num_Only_Adms_Data <- Record_DF_all[-c(4,5)])
+str(Num_Only_Adms_Data)
+
+
+# Scale the data
+scaled_df <- scale(Num_Only_Adms_Data)
+
+# Calculate cosine distance matrix
+(CosSim <- stylo::dist.cosine(as.matrix(Num_Only_Adms_Data)))
+
+
+#Perform hierarchical clustering using Ward's method
+Hist1 <- stats::hclust(CosSim, method="ward.D2")
+plot(Hist1,  main = "Cluster Cosine Ward.D2")
+
+#visualize hclust
+fviz_dend(Hist1, cex = 0.9, k = 2)
+
+
+#visualize hclust pylogen type
+fviz_dend(Hist1, cex = 0.8, lwd = 0.8, k = 4,
+                  rect = TRUE,
+                  k_colors = "jco",
+                  rect_border = "jco",
+                  rect_fill = TRUE,
+                  type = "phylogenic", phylo_layout = "layout_with_lgl")
+
+          
+          
+# Perform hierarchical clustering using average method
+(HClust_Ward_avg <- hclust(CosSim, method = "average" ))
+plot(HClust_Ward_avg, cex=0.9, hang=-1, main = "Cluster Cosine Avg Method")
+rect.hclust(HClust_Ward_avg, k=4)
+
+#Performing analysis of hierarchial clustering methods
+(Record_DF_Norm <- as.data.frame(apply(Num_Only_Adms_Data[,1:3 ], 2, 
+                                 function(x) (x - min(x))/(max(x)-min(x)))))
+MethodMeasures <- function(x) {
+  cluster::agnes(Record_DF_Norm, method = x)$ac
+}
+
+methods <- c( "average", "single", "complete", "ward")
+names(methods) <- c( "average", "single", "complete", "ward")
+
+(purrr::map_dbl(methods, MethodMeasures))
+
+
+

@@ -1,0 +1,74 @@
+---
+output:
+  html_document: default
+  pdf_document: default
+---
+
+library(dplyr)
+
+install.packages("tidyr")
+install.packages("arules")
+install.packages("arulesViz")
+
+library(arules)
+
+library(viridis)
+library(arules)
+library(TSP)
+library(data.table)
+#library(ggplot2)
+#library(Matrix)
+library(tcltk)
+library(dplyr)
+library(devtools)
+library(purrr)
+library(tidyr) 
+library(arulesViz)
+
+setwd("C:/Users/HP/Downloads/RStudioFolder_1")
+
+
+# Load the dataset
+aviation_data <- read.transactions("transactional_aviation1.csv",
+                             rm.duplicates = FALSE, 
+                             format = "basket",  ##if you use "single" also use cols=c(1,2)
+                             sep=",",  ## csv file
+                             cols=NULL) ## The dataset has no row numbers
+inspect(aviation_data)
+summary(aviation_data)
+
+Frules = arules::apriori(aviation_data, parameter = list(support=.12, 
+                                          confidence=.5, minlen=2))
+inspect(Frules)
+
+## Plot of which items are most frequent
+itemFrequencyPlot(aviation_data, topN=20, type="absolute")
+
+## Sort rules by a measure such as conf
+SortedRules <- sort(Frules, by="confidence", decreasing=FALSE)
+inspect(SortedRules[1:15])
+
+## Sort rules by a measure such as support
+SortedRules <- sort(Frules, by="support", decreasing=FALSE)
+inspect(SortedRules[1:15])
+
+## Sort rules by a measure such as lift
+SortedRules <- sort(Frules, by="lift", decreasing=FALSE)
+inspect(SortedRules[1:15])
+
+#plotfor subrules by support
+subrules1 <- head(sort(SortedRules, by="support"),10)
+plot(subrules1)
+
+#plot(subrules, method="graph", engine="interactive")
+plot(subrules1, method="graph", engine="htmlwidget")
+
+#plotfor subrules by confidence
+subrules2 <- head(sort(SortedRules, by="confidence"),10)
+plot(subrules2)
+
+#plot(subrules, method="graph", engine="interactive")
+plot(subrules2, method="graph", engine="htmlwidget")
+
+
+

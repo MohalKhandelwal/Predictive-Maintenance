@@ -1,0 +1,137 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+library(tm)
+#install.packages("tm")
+library(stringr)
+#install.packages("wordcloud")
+library(wordcloud)
+# ONCE: install.packages("Snowball")
+## NOTE Snowball is not yet available for R v 3.5.x
+## So I cannot use it  - yet...
+##library("Snowball")
+##set working directory
+## ONCE: install.packages("slam")
+library(slam)
+library(quanteda)
+## ONCE: install.packages("quanteda")
+## Note - this includes SnowballC
+library(SnowballC)
+library(arules)
+##ONCE: install.packages('proxy')
+library(proxy)
+library(cluster)
+library(stringi)
+library(proxy)
+library(Matrix)
+#install.packages("tidytext")
+library(tidytext) # convert DTM to DF
+library(plyr) ## for adply
+library(ggplot2)
+library(factoextra) # for fviz
+library(mclust) # for Mclust EM clustering
+
+library(naivebayes)
+#Loading required packages
+#install.packages('tidyverse')
+library(tidyverse)
+#install.packages('ggplot2')
+library(ggplot2)
+#install.packages('caret')
+library(caret)
+#install.packages('caretEnsemble')
+library(caretEnsemble)
+#install.packages('psych')
+library(psych)
+#install.packages('Amelia')
+library(Amelia)
+#install.packages('mice')
+library(mice)
+#install.packages('GGally')
+library(GGally)
+library(e1071)
+
+
+
+setwd("C:/Users/HP/Downloads/RStudioFolder_1")
+
+PredMainDataFile="pred_maintenance_NB.csv"
+head(PredMainDF<-read.csv(PredMainDataFile))
+
+(Size <- (as.integer(nrow(PredMainDF)/4)))  ## Test will be 1/4 of the data
+(SAMPLE <- sample(nrow(PredMainDF), Size))
+
+(DF_Test_PredMain<-PredMainDF[SAMPLE, ])
+(DF_Train_PredMain<-PredMainDF[-SAMPLE, ])
+
+## REMOVE the labels and KEEP THEM
+
+str(DF_Test_PredMain$Target)  ## Notice that the label is called "Decision" and
+## is correctly set to type FACTOR. This is IMPORTANT!!
+str(DF_Train_PredMain$Target)  ## GOOD! Here "Decision" is also type FACTOR
+##Check balance of test dataset
+table(DF_Test_PredMain$Target)
+
+table(DF_Train_PredMain$Target)
+
+##################################### REMOVE AND SAVE LABELS...
+## Copy the Labels
+(DF_Test_PredMain_Labels <- DF_Test_PredMain$Target)
+## Remove the labels
+DF_Test_PredMain_NL<-DF_Test_Student[ , -which(names(DF_Test_PredMain) %in% c("Target"))]
+(DF_Test_PredMain_NL[1:5, 1:5])
+## Check size
+(ncol(DF_Test_PredMain_NL))
+#(DF_Test_Student_NL)
+## Train...--------------------------------
+## Copy the Labels
+(DF_Train_PredMain_Labels <- DF_Train_PredMain$Target)
+DF_Train_PredMain_Labels
+## Remove the labels
+DF_Train_PredMain_NL<-DF_Train_PredMain[ , -which(names(DF_Train_PredMain) %in% c("Target"))]
+(DF_Train_PredMain_NL[1:5, 1:5])
+## Check size
+(ncol(DF_Train_PredMain_NL))
+
+library(GGally)
+library(e1071)
+library(naivebayes)
+
+
+(NB_e1071_PredMain<-naiveBayes(DF_Train_PredMain_NL, DF_Train_PredMain_Labels, laplace = 1))
+
+(NB_e1071_PredMain<-naiveBayes(DF_Train_PredMain_NL, DF_Train_PredMain_Labels, laplace = 1))
+NB_e1071_Pred_PredMain <- predict(NB_e1071_PredMain, DF_Test_PredMain_NL)
+table(NB_e1071_Pred_PredMain,DF_Test_PredMain_Labels)
+(NB_e1071_Pred_PredMain)
+
+accuracy1 <- sum(diag(table(NB_e1071_Pred_PredMain, DF_Test_PredMain_Labels))) / sum(table(NB_e1071_Pred_PredMain, DF_Test_PredMain_Labels))
+accuracy1
+
+library(caret)
+
+# Convert predicted and actual values to factors with same levels
+NB_e1071_Pred_PredMain <- factor(NB_e1071_Pred_PredMain, levels = c("0", "1"))
+DF_Test_PredMain_Labels <- factor(DF_Test_PredMain_Labels, levels = c("0", "1"))
+DF_Train_PredMain_Labels <- factor(DF_Train_PredMain_Labels, levels = c("0", "1"))
+
+## Check factor levels of test and training data
+levels(DF_Test_PredMain_Labels)
+levels(DF_Train_PredMain_Labels)
+
+library(caret)
+library(ggplot2)
+
+# Compute confusion matrix and accuracy
+cm <- confusionMatrix(NB_e1071_Pred_PredMain, DF_Test_PredMain_Labels)
+print(cm)
+
+ggplot(data = as.data.frame(cm$table)) + 
+  geom_tile(aes(x = Prediction, y = Reference, fill = Freq)) +
+  theme_minimal() +
+  labs(x = "Predicted Class", y = "True Class", 
+       title = "Confusion Matrix for Naive Bayes Model")
+

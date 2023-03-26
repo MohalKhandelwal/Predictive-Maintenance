@@ -1,0 +1,25 @@
+Jet,Power,Engine,Inspection,,Clear
+Jet,Overstrain,Wing,Replacement,Bolt,Rainy
+Jet,No Failure,Fuselage,Inspection,,
+Jet,Heat Dissipation,Engine,,,Sunny
+Jet,Power,Landing Gear,Replacement,Spark Plug,Foggy
+Jet,Overstrain,Engine,Repair,,Clear
+Jet,Heat Dissipation,Wing,Cleaning,,Cloudy
+Helicopter,No Failure,Fuselage,Inspection,,
+Jet,No Failure,Engine,Inspection,,Sunny
+Helicopter,Power,Fuselage,Replacement,Spark Plug,Rainy
+Jet,Overstrain,Landing Gear,Inspection,,Clear
+Jet,Heat Dissipation,Wing,Cleaning,,Sunny
+Jet,Heat Dissipation,Engine,,,Clear
+Jet,No Failure,Fuselage,Inspection,,
+Jet,Power,Wing,Replacement,Rivet,Rainy
+Jet,Overstrain,Engine,Repair,,Cloudy
+Jet,Heat Dissipation,Landing Gear,Cleaning,,Sunny
+Jet,No Failure,Wing,Inspection,,Clear
+Jet,No Failure,Fuselage,,,Sunny
+Jet,Power,Engine,Replacement,Rivet,Rainy
+Jet,Overstrain,Fuselage,Repair,,
+Jet,Heat Dissipation,Wing,Cleaning,,Foggy
+Helicopter,Heat Dissipation,Engine,Cleaning,,Clear
+Jet,No Failure,Wing,Inspection,,Sunny
+Jet,Power,Landing Gear,Replacement,Gear Box,Rainy
