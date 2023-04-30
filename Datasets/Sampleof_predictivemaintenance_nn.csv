@@ -1,0 +1,30 @@
+﻿Air_temperature,Process_temperature,Rotational_speed,Target,Failure_Type
+295.7,306.2,2270,1,Power Failure
+295.8,306.3,1235,1,Power Failure
+295.3,305.7,1473,0,No Failure
+295.4,305.9,1518,0,No Failure
+296.3,307.2,1319,1,Power Failure
+296.4,307.4,2833,1,Power Failure
+295.4,305.8,1526,0,No Failure
+295.4,305.8,1407,0,No Failure
+295.5,306.1,1650,0,No Failure
+295.6,306.2,1584,0,No Failure
+297.5,308.1,1334,1,Power Failure
+297.6,309.6,1501,1,Overstrain Failure
+297.7,308.5,1373,1,Overstrain Failure
+297.8,307.3,1327,1,Overstrain Failure
+295.9,306.6,1678,0,No Failure
+295.9,306.5,1594,0,No Failure
+295.9,306.4,1892,0,No Failure
+295.9,306.4,1575,0,No Failure
+295.9,306.6,1532,0,No Failure
+297.2,307.9,1825,0,No Failure
+297.2,307.9,1469,0,No Failure
+303.6,312,1309,1,Heat Dissipation Failure
+303.6,312.2,1371,1,Heat Dissipation Failure
+303.6,312.8,2659,1,Power Failure
+303.7,311.9,1332,1,Heat Dissipation Failure
+303.7,312,2663,1,Power Failure
+302.9,311.2,1330,1,Heat Dissipation Failure
+303,311.2,1374,1,Heat Dissipation Failure
+303.4,311.9,1377,0,Heat Dissipation Failure
